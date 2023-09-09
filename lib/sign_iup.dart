@@ -1,25 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_sub/firebase_auth_service.dart';
+//import 'package:firebase_sub/firebase_auth_service.dart';
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
 
   @override
-   _SignUpState createState() => _SignUpState();
+   SignUpState createState() => SignUpState();
 }
 
-class _SignUpState extends State<SignUp> {
+class SignUpState extends State<SignUp> {
 
-  final _emailEditingController = TextEditingController();
-  final _passwordEditingController = TextEditingController();
+//  final _emailEditingController = TextEditingController();
+  //final _passwordEditingController = TextEditingController();
 
   bool _alreadySignedUp =false;
+
   void handleSignUP()async{
     try{
-      await FirebaseAuthService().createUserWithEmailAndPassword(
-        email: _emailEditingController.text,
-        password: _passwordEditingController.text
-      );
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+          email: 'cat_black@exmaple.com',
+          password: 'mofumofu55');
+    //  await FirebaseAuthService().createUserWithEmailAndPassword(
+      //  email: _emailEditingController.text,
+      //  password: _passwordEditingController.text
+
     }on FirebaseAuthException catch(e) {
       if (e.code == 'email-already-in-use') {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -44,11 +49,16 @@ class _SignUpState extends State<SignUp> {
   }
 
   void handleSignIn()async{
-    try{
-      await FirebaseAuthService().signInWithEmailAndPassword(
-          email: _emailEditingController.text,
-          password: _passwordEditingController.text
-      );
+   try{
+     UserCredential userCredential = await FirebaseAuth.instance
+        .signInWithEmailAndPassword(
+        email: 'cat_black@exmaple.com',
+        password: 'mofumofu55');
+    //);
+    //  await FirebaseAuthService().signInWithEmailAndPassword(
+     //     email: _emailEditingController.text,
+    //      password: _passwordEditingController.text
+     // );
     }on FirebaseAuthException catch(e) {
       if (e.code == 'user-not-in-found') {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -56,7 +66,8 @@ class _SignUpState extends State<SignUp> {
           backgroundColor: Colors.red,
           duration: Duration(seconds: 2),
         ));
-      } else if (e.code == 'wrong-password') {
+      } else {
+        if (e.code == 'wrong-password') {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('パスワードが違います'),
           backgroundColor: Colors.red,
@@ -68,6 +79,7 @@ class _SignUpState extends State<SignUp> {
           backgroundColor: Colors.red,
           duration: Duration(seconds: 2),
         ));
+      }
       }
     }
   }
@@ -81,14 +93,14 @@ class _SignUpState extends State<SignUp> {
             children: [
               TextFormField(
                 keyboardType: TextInputType.emailAddress,
-                controller: _emailEditingController,
+           //     controller: _emailEditingController,
                 decoration: const InputDecoration(labelText: 'メールアドレス',border:  OutlineInputBorder()),
               ),
               const SizedBox(height: 20,),
               TextFormField(
                 obscureText: true,
                 keyboardType: TextInputType.emailAddress,
-                controller: _passwordEditingController,
+             //   controller: _passwordEditingController,
                 decoration: const InputDecoration(labelText: 'パスワード',border:  OutlineInputBorder()),
               ),
               const SizedBox(height: 20,),
@@ -122,7 +134,7 @@ class _SignUpState extends State<SignUp> {
                       style: const TextStyle(color: Colors.grey,decoration: TextDecoration.underline,),
                      )
               ),
-               Container(
+               SizedBox(
                  height: 300,width: 300,
                   child: Image.asset('assets/mohikan.jpg'),
       ),
