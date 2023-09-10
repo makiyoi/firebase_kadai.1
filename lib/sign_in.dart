@@ -22,18 +22,18 @@ class _ChatState extends State<Chat> {
    final  Stream<QuerySnapshot> _messagesStream= FirebaseFirestore.instance.collection('users').snapshots();
   @override
 
-  void initState(){
-    super.initState();
-    _messagesStream;
-  }
-  @override
-  void dispose(){
-    super.dispose();
-    _messageEditingController.dispose();
-  }
+ // void initState(){
+ //   super.initState();
+ //   _messagesStream;
+ // }
+ // @override
+ // void dispose(){
+ //   super.dispose();
+//    _messageEditingController.dispose();
+//  }
 
 
-  @override
+ // @override
   Widget build(BuildContext context) {
     return Scaffold(
     body:

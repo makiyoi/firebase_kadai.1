@@ -22,7 +22,7 @@ class SignUpState extends State<SignUp> {
           UserCredential userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(
           email: 'cat_blue@exmaple.com',
-          password: 'mofumofu55');
+          password: 'password');
           User user = userCredential.user!;
            FirebaseFirestore.instance.collection('users').doc(user.uid).set({
             'id': user.uid,
@@ -58,13 +58,13 @@ class SignUpState extends State<SignUp> {
       try {
         UserCredential userCredential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(
-             email: 'cat_black@exmaple.com',
-             password: 'mofumofu55');
-         User user = userCredential.user!;
-         FirebaseFirestore.instance.collection('users').doc(user.uid).set({
-           'id': user.uid,
-          'email': user.email
-        });
+             email: 'cat_blue@exmaple.com',
+             password: 'password');
+    //     User user = userCredential.user!;
+      //   FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+        //   'id': user.uid,
+       //   'email': user.email
+      //  });
         //);
         //  await FirebaseAuthService().signInWithEmailAndPassword(
         //     email: _emailEditingController.text,
