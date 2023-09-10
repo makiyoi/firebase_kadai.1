@@ -1,8 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Chat extends StatefulWidget {
-  const Chat({super.key, });
+  const Chat({Key? key }) : super(key: key);
 
   //  final String userId;
   @override
@@ -10,39 +11,57 @@ class Chat extends StatefulWidget {
 }
 
 class _ChatState extends State<Chat> {
+
+
+   messageData (){
+     FirebaseFirestore.instance.collection('users');
+   }
    final _messageEditingController = TextEditingController();
     final _listScrollController = ScrollController();
    final double _inputHeight = 60;
+   final  Stream<QuerySnapshot> _messagesStream= FirebaseFirestore.instance.collection('users').snapshots();
   @override
 
+  void initState(){
+    super.initState();
+    _messagesStream;
+  }
+  @override
+  void dispose(){
+    super.dispose();
+    _messageEditingController.dispose();
+  }
 
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
     body:
-      Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
+         Column(
           children: [
             StreamBuilder<QuerySnapshot>(
+              stream:  _messagesStream,//FirebaseFirestore.instance.collection('').snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   List<DocumentSnapshot> messagesData = snapshot.data!.docs;
-                  return ListView.builder(
+                  return Expanded(
+                    child: ListView.builder(
                       controller: _listScrollController,
                       itemCount: messagesData.length,
-                      itemBuilder: (context, index) {
-                        return const ListTile(
-                          title: Text(''),
-                        );
+                      itemBuilder: (BuildContext context, int index) {
+                        Map<String, dynamic> messageData = messagesData[index]
+                            .data()! as Map<String, dynamic>;
+                        return // MessageCard(messageData:messageData,);
+                        ListTile(
+                          title: Text('${messageData['post']}'),);
                       },
-                    );
-                  }else{
-                  return const Center(child: CircularProgressIndicator(),);
+                    ),
+                  );
                 }
+                return const Center(child: CircularProgressIndicator(),);
               }
               ),
-           const SizedBox(height: 150,),
+
           Container(
             height: _inputHeight,
             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -62,8 +81,10 @@ class _ChatState extends State<Chat> {
                 margin: const EdgeInsets.symmetric(horizontal: 5),
                 child: IconButton(
                   onPressed: () {
-                   _messageEditingController.clear();
-                    },
+                    if(_messageEditingController.text!='') {
+                      _messageEditingController.clear();
+                      messageData();
+                    }},
                   icon: const Icon(Icons.send),
                 ),
               ),
@@ -72,7 +93,7 @@ class _ChatState extends State<Chat> {
           ),
           ],
         ),
-      )
+
     );
   }
 }

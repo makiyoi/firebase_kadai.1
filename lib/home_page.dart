@@ -2,11 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_sub/sign_in.dart';
 import 'package:firebase_sub/sign_iup.dart';
 import 'package:flutter/material.dart';
+
 //import 'package:firebase_sub/firebase_auth_service.dart';
-
-
-
-
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -27,7 +24,7 @@ class _HomePageState extends State<HomePage> {
           _isSignedIn = false;
         });
       } else {
-    //    userId = user.uid;
+        //  userId = user.uid;
         setState(() {
           _isSignedIn = true;
         });
@@ -37,7 +34,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-
     checkSignInState();
   }
   Widget build(BuildContext context) {
