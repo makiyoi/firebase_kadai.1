@@ -14,6 +14,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   bool _isSignedIn =false;
  // String userId ="";
+  final _auth = FirebaseAuth.instance;
+
+  Stream<User?> authStateChanges() => _auth.authStateChanges();
 
   void checkSignInState(){
      FirebaseAuth.instance

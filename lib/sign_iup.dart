@@ -12,25 +12,25 @@ class SignUp extends StatefulWidget {
 }
 class SignUpState extends State<SignUp> {
 
-  //  final _emailEditingController = TextEditingController();
-  //  final _passwordEditingController = TextEditingController();
+  final _emailEditingController = TextEditingController();
+  final _passwordEditingController = TextEditingController();
 
   bool _alreadySignedUp = false;
 
     void handleSignUP() async {
       try {
-          UserCredential userCredential = await FirebaseAuth.instance
+        final userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(
-          email: 'cat_blue@exmaple.com',
-          password: 'password');
-          User user = userCredential.user!;
+            email: _emailEditingController.text,//'cat_blue@exmaple.com',
+            password: _passwordEditingController.text);//'password');
+           User user = userCredential.user!;
            FirebaseFirestore.instance.collection('users').doc(user.uid).set({
-            'id': user.uid,
-           'email' : user.email
-          });
-        //  await FirebaseAuthService().createUserWithEmailAndPassword(
-        //  email: _emailEditingController.text,
-        //  password: _passwordEditingController.text
+             'id': user.uid,
+             'email': user.email
+           });
+              //  await FirebaseAuthService().createUserWithEmailAndPassword(
+              // email:_emailEditingController.text,
+              // password: _passwordEditingController.text
       } on FirebaseAuthException catch (e) {
         if (e.code == 'email-already-in-use') {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -56,20 +56,10 @@ class SignUpState extends State<SignUp> {
 
     void handleSignIn() async {
       try {
-        UserCredential userCredential = await FirebaseAuth.instance
-            .signInWithEmailAndPassword(
-             email: 'cat_blue@exmaple.com',
-             password: 'password');
-    //     User user = userCredential.user!;
-      //   FirebaseFirestore.instance.collection('users').doc(user.uid).set({
-        //   'id': user.uid,
-       //   'email': user.email
-      //  });
-        //);
-        //  await FirebaseAuthService().signInWithEmailAndPassword(
-        //     email: _emailEditingController.text,
-        //      password: _passwordEditingController.text
-        // );
+        final userCredential= await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+            email: _emailEditingController.text,//'cat_blue@exmaple.com',
+            password: _passwordEditingController.text);//'password');
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-in-found') {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -100,30 +90,27 @@ class SignUpState extends State<SignUp> {
       return Center(
         child: SizedBox(
           width: MediaQuery
-              .of(context)
-              .size
-              .width / 2,
+              .of(context).size.width / 2,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextFormField(
                 keyboardType: TextInputType.emailAddress,
-                //     controller: _emailEditingController,
+                controller: _emailEditingController,
                 decoration: const InputDecoration(
                     labelText: 'メールアドレス', border: OutlineInputBorder()),
               ),
               const SizedBox(height: 20,),
               TextFormField(
                 obscureText: true,
-                keyboardType: TextInputType.emailAddress,
-                //   controller: _passwordEditingController,
+                controller: _passwordEditingController,
                 decoration: const InputDecoration(
                     labelText: 'パスワード', border: OutlineInputBorder()),
               ),
               const SizedBox(height: 20,),
               _alreadySignedUp ? ElevatedButton(
                 onPressed: () {
-                  handleSignIn();
+                    handleSignIn();
                 },
                 style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.all(20),
@@ -131,7 +118,7 @@ class SignUpState extends State<SignUp> {
                         borderRadius: BorderRadius.circular(15))
                 ),
                 child: const Text(
-                  'サインイン', style: TextStyle(color: Colors.white),),
+                  'ログイン', style: TextStyle(color: Colors.white),),
               ) : ElevatedButton(
                 onPressed: () {
                   handleSignUP();
@@ -160,8 +147,6 @@ class SignUpState extends State<SignUp> {
                 height: 300, width: 300,
                 child: Image.asset('assets/mohikan.jpg'),
               ),
-
-
             ],
           ),
         ),
