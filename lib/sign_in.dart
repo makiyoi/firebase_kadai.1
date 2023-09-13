@@ -17,8 +17,7 @@ class _ChatState extends State<Chat> {
   final _messageEditingController = TextEditingController();
   final _listScrollController = ScrollController();
   final double _inputHeight = 60;
-  late Stream<
-      QuerySnapshot> _messagesStream; //= FirebaseFirestore.instance.collection('users').snapshots();
+  late Stream<QuerySnapshot> _messagesStream; //= FirebaseFirestore.instance.collection('users').snapshots();
 
   Stream<QuerySnapshot> _getMessagesStream() {
     return _firestoreService.getMessagesStream(limit: 10);
@@ -28,13 +27,10 @@ class _ChatState extends State<Chat> {
     try {
       await _firestoreService.addMessage({
         'text': _messageEditingController.text,
-        'date': DateTime
-            .now()
-            .millisecondsSinceEpoch
+        'date': DateTime.now().millisecondsSinceEpoch
       });
       _messageEditingController.clear();
-      _listScrollController.jumpTo(
-          _listScrollController.position.maxScrollExtent);
+      _listScrollController.jumpTo(_listScrollController.position.maxScrollExtent);
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -75,9 +71,7 @@ class _ChatState extends State<Chat> {
                       controller: _listScrollController,
                       itemCount: messagesData.length,
                       itemBuilder: (context, index) {
-                        final messageData = messagesData[index].data()! as Map<
-                            String,
-                            dynamic>;
+                        final messageData = messagesData[index].data()! as Map<String, dynamic>;
                         return MessageCard(messageData: messageData,);
                       },
                     ),
@@ -105,7 +99,7 @@ class _ChatState extends State<Chat> {
                   margin: const EdgeInsets.symmetric(horizontal: 5),
                   child: IconButton(
                     onPressed: () {
-                      if (_messageEditingController.text != '') {
+                      if (_messageEditingController.text!='') {
                         _addMessage();
                       }},
                     icon: const Icon(Icons.send),
