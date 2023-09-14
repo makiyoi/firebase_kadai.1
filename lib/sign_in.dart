@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_sub/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 class Chat extends StatefulWidget {
   const Chat({super. key }); //: super(key: key);
 
@@ -120,11 +120,14 @@ class MessageCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return  Card(
        child: ListTile(
-         tileColor: Colors.lightGreenAccent,
+         //tileColor: Colors.lightGreenAccent,
          title: Text(messageData['text'] is String? messageData['text']:'無効なメッセージ'),
          subtitle: Text(DateFormat('yyyy/MM/dd HH:mm')
              .format(DateTime.fromMillisecondsSinceEpoch(messageData['date'] is int? messageData['date']:0))),
-    ),
+         tileColor:   ? Colors.amber[100] : Colors.blue[100],
+
+
+       ),
     );
   }
 }
