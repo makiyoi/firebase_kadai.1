@@ -17,6 +17,7 @@ class _ChatState extends State<Chat> {
   final _messageEditingController = TextEditingController();
   final _listScrollController = ScrollController();
   final double _inputHeight = 60;
+
   late Stream<QuerySnapshot> _messagesStream; //= FirebaseFirestore.instance.collection('users').snapshots();
 
   Stream<QuerySnapshot> _getMessagesStream() {
@@ -116,17 +117,17 @@ class _ChatState extends State<Chat> {
 class MessageCard extends StatelessWidget {
   const MessageCard({Key? key,required this.messageData}) : super(key: key);
   final Map<String, dynamic> messageData;
+  final bool  checkSignInState = false;
+
   @override
   Widget build(BuildContext context) {
     return  Card(
        child: ListTile(
-         //tileColor: Colors.lightGreenAccent,
+
          title: Text(messageData['text'] is String? messageData['text']:'無効なメッセージ'),
          subtitle: Text(DateFormat('yyyy/MM/dd HH:mm')
              .format(DateTime.fromMillisecondsSinceEpoch(messageData['date'] is int? messageData['date']:0))),
-         tileColor:   ? Colors.amber[100] : Colors.blue[100],
-
-
+         tileColor:  checkSignInState?Colors.amber[100] : Colors.blue[100],
        ),
     );
   }
