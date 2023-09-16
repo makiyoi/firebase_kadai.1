@@ -12,10 +12,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool _isSignedIn =false;
- // String userId ="";
-//  final _auth = FirebaseAuth.instance;
-
- // Stream<User?> authStateChanges() => _auth.authStateChanges();
+  String userId ="";
 
   void checkSignInState(){
      FirebaseAuth.instance
@@ -26,7 +23,7 @@ class _HomePageState extends State<HomePage> {
           _isSignedIn = false;
         });
       } else {
-        //  userId = user.uid;
+          userId = user.uid;
         setState(() {
           _isSignedIn = true;
         });

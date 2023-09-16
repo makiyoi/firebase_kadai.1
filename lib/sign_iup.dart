@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-//import 'package:firebase_sub/firebase_auth_service.dart';
+//import 'package:firebase_sub/home_page.dart';
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
 
@@ -14,7 +14,7 @@ class SignUpState extends State<SignUp> {
 
   final _emailEditingController = TextEditingController();
   final _passwordEditingController = TextEditingController();
-
+  final _messageEditingController = TextEditingController();
   bool _alreadySignedUp = false;
 
     void handleSignUP() async {
@@ -24,13 +24,12 @@ class SignUpState extends State<SignUp> {
             email: _emailEditingController.text,//'cat_blue@exmaple.com',
             password: _passwordEditingController.text);//'password');
            User user = userCredential.user!;
-           FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+           FirebaseFirestore.instance.collection('messages').doc().set({
              'id': user.uid,
-             'email': user.email
+             'email': user.email,
+            // 'text' : _messageEditingController.text,
+            // 'date': DateTime.now().millisecondsSinceEpoch,
            });
-              //  await FirebaseAuthService().createUserWithEmailAndPassword(
-              // email:_emailEditingController.text,
-              // password: _passwordEditingController.text
       } on FirebaseAuthException catch (e) {
         if (e.code == 'email-already-in-use') {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -56,10 +55,10 @@ class SignUpState extends State<SignUp> {
 
     void handleSignIn() async {
       try {
-        final userCredential= await FirebaseAuth.instance
+         UserCredential userCredential= await FirebaseAuth.instance
           .signInWithEmailAndPassword(
             email: _emailEditingController.text,//'cat_blue@exmaple.com',
-            password: _passwordEditingController.text);//'password');
+            password: _passwordEditingController.text);
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-in-found') {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -89,8 +88,7 @@ class SignUpState extends State<SignUp> {
     Widget build(BuildContext context) {
       return Center(
         child: SizedBox(
-          width: MediaQuery
-              .of(context).size.width / 2,
+          width: MediaQuery.of(context).size.width / 2,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_sub/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 class Chat extends StatefulWidget {
   const Chat({super. key }); //: super(key: key);
 
@@ -25,23 +26,23 @@ class _ChatState extends State<Chat> {
   }
 
   Future<void> _addMessage() async {
-    try {
+   // try {
       await _firestoreService.addMessage({
         'text': _messageEditingController.text,
-        'date': DateTime.now().millisecondsSinceEpoch
+        'date': DateTime.now().millisecondsSinceEpoch,
       });
       _messageEditingController.clear();
       _listScrollController.jumpTo(_listScrollController.position.maxScrollExtent);
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('メッセージを送信できませんでした'),
-            margin: EdgeInsets.only(bottom: _inputHeight),
-          )
-      );
+   // } catch (e) {
+     // if (!mounted) return;
+     // ScaffoldMessenger.of(context).showSnackBar(
+       //   SnackBar(
+         //   content: const Text('メッセージを送信できませんでした'),
+           // margin: EdgeInsets.only(bottom: _inputHeight),
+        //  )
+     // );
     }
-  }
+  //}
 
   @override
   void initState() {
@@ -63,7 +64,6 @@ class _ChatState extends State<Chat> {
         children: [
           StreamBuilder<QuerySnapshot>(
               stream: _messagesStream,
-              //FirebaseFirestore.instance.collection('').snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   List<DocumentSnapshot> messagesData = snapshot.data!.docs;
@@ -99,10 +99,10 @@ class _ChatState extends State<Chat> {
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 5),
                   child: IconButton(
-                    onPressed: () {
-                      if (_messageEditingController.text!='') {
-                        _addMessage();
-                      }},
+                    onPressed: ()  {
+                     // if (_messageEditingController.text!='') {
+                       { _addMessage();
+                            } },
                     icon: const Icon(Icons.send),
                   ),
                 ),
@@ -117,7 +117,6 @@ class _ChatState extends State<Chat> {
 class MessageCard extends StatelessWidget {
   const MessageCard({Key? key,required this.messageData}) : super(key: key);
   final Map<String, dynamic> messageData;
-  final bool  checkSignInState = false;
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +126,7 @@ class MessageCard extends StatelessWidget {
          title: Text(messageData['text'] is String? messageData['text']:'無効なメッセージ'),
          subtitle: Text(DateFormat('yyyy/MM/dd HH:mm')
              .format(DateTime.fromMillisecondsSinceEpoch(messageData['date'] is int? messageData['date']:0))),
-         tileColor:  checkSignInState?Colors.amber[100] : Colors.blue[100],
+         tileColor: FirebaseAuth.instance.currentUser!.uid == messageData?Colors.amber[100] : Colors.blue[100],
        ),
     );
   }
