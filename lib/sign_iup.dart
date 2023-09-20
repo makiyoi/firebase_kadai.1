@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-//import 'package:firebase_sub/home_page.dart';
+
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
 
@@ -14,21 +14,19 @@ class SignUpState extends State<SignUp> {
 
   final _emailEditingController = TextEditingController();
   final _passwordEditingController = TextEditingController();
-  final _messageEditingController = TextEditingController();
   bool _alreadySignedUp = false;
 
     void handleSignUP() async {
       try {
         final userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(
-            email: _emailEditingController.text,//'cat_blue@exmaple.com',
-            password: _passwordEditingController.text);//'password');
+            email: _emailEditingController.text,
+            password: _passwordEditingController.text
+        );
            User user = userCredential.user!;
-           FirebaseFirestore.instance.collection('messages').doc().set({
+           FirebaseFirestore.instance.collection('users').doc(user.uid).set({
              'id': user.uid,
              'email': user.email,
-            // 'text' : _messageEditingController.text,
-            // 'date': DateTime.now().millisecondsSinceEpoch,
            });
       } on FirebaseAuthException catch (e) {
         if (e.code == 'email-already-in-use') {

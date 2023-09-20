@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: _isSignedIn?const Chat():const SignUp(),
+      body: _isSignedIn?const Chat(id: 'user.uid',):const SignUp(),
     );
   }
 }

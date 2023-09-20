@@ -5,45 +5,46 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class Chat extends StatefulWidget {
-  const Chat({super. key }); //: super(key: key);
+  const Chat({super.key, required this.id})
+  final String id;
 
-  //  final String userId;
  @override
-  _ChatState createState() => _ChatState();
+  ChatState createState() => ChatState();
 }
-
-class _ChatState extends State<Chat> {
+class ChatState extends State<Chat> {
 
   final _firestoreService = FirestoreService();
   final _messageEditingController = TextEditingController();
   final _listScrollController = ScrollController();
   final double _inputHeight = 60;
 
-  late Stream<QuerySnapshot> _messagesStream; //= FirebaseFirestore.instance.collection('users').snapshots();
+  late Stream<QuerySnapshot> _messagesStream= FirebaseFirestore.instance.collection('messages').snapshots();
 
   Stream<QuerySnapshot> _getMessagesStream() {
     return _firestoreService.getMessagesStream(limit: 10);
   }
 
   Future<void> _addMessage() async {
-   // try {
+    //try {
       await _firestoreService.addMessage({
         'text': _messageEditingController.text,
         'date': DateTime.now().millisecondsSinceEpoch,
+        'id' : user.uid,
       });
+      //FirebaseFirestore.instance.collection('messages').doc(user.uid).set({
+      //});
       _messageEditingController.clear();
-      _listScrollController.jumpTo(_listScrollController.position.maxScrollExtent);
-   // } catch (e) {
-     // if (!mounted) return;
-     // ScaffoldMessenger.of(context).showSnackBar(
-       //   SnackBar(
-         //   content: const Text('メッセージを送信できませんでした'),
-           // margin: EdgeInsets.only(bottom: _inputHeight),
-        //  )
-     // );
-    }
-  //}
-
+    _listScrollController.jumpTo(_listScrollController.position.maxScrollExtent);
+  //  } catch (e) {
+  //    if (!mounted) return;
+   //   ScaffoldMessenger.of(context).showSnackBar(
+    //      SnackBar(
+        //    content: const Text('メッセージを送信できませんでした'),
+       //    margin: EdgeInsets.only(bottom: _inputHeight),
+     //    )
+   //  );
+    //}
+  }
   @override
   void initState() {
     super.initState();
@@ -73,7 +74,8 @@ class _ChatState extends State<Chat> {
                       itemCount: messagesData.length,
                       itemBuilder: (context, index) {
                         final messageData = messagesData[index].data()! as Map<String, dynamic>;
-                        return MessageCard(messageData: messageData,);
+                        return MessageCard(messageData: messageData);
+
                       },
                     ),
                   );
@@ -99,11 +101,15 @@ class _ChatState extends State<Chat> {
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 5),
                   child: IconButton(
-                    onPressed: ()  {
-                     // if (_messageEditingController.text!='') {
-                       { _addMessage();
-                            } },
-                    icon: const Icon(Icons.send),
+                    onPressed: () {
+                     // if/ (_messageEditingController.text != '') {
+                      //  {
+                          _addMessage();
+                          widget.id;
+                        },
+                     // }
+                   // },
+                      icon: const Icon(Icons.send),
                   ),
                 ),
               ],
@@ -123,7 +129,7 @@ class MessageCard extends StatelessWidget {
     return  Card(
        child: ListTile(
 
-         title: Text(messageData['text'] is String? messageData['text']:'無効なメッセージ'),
+         title: Text(messageData['text'] ),//is String? messageData['text']:'無効なメッセージ'),
          subtitle: Text(DateFormat('yyyy/MM/dd HH:mm')
              .format(DateTime.fromMillisecondsSinceEpoch(messageData['date'] is int? messageData['date']:0))),
          tileColor: FirebaseAuth.instance.currentUser!.uid == messageData?Colors.amber[100] : Colors.blue[100],
