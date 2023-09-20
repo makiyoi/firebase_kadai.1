@@ -29,7 +29,7 @@ class ChatState extends State<Chat> {
       await _firestoreService.addMessage({
         'text': _messageEditingController.text,
         'date': DateTime.now().millisecondsSinceEpoch,
-        'id' : user.uid,
+        'id':  widget.id,
       });
       //FirebaseFirestore.instance.collection('messages').doc(user.uid).set({
       //});
@@ -105,7 +105,6 @@ class ChatState extends State<Chat> {
                      // if/ (_messageEditingController.text != '') {
                       //  {
                           _addMessage();
-                          widget.id;
                         },
                      // }
                    // },
@@ -123,8 +122,9 @@ class ChatState extends State<Chat> {
 class MessageCard extends StatelessWidget {
   const MessageCard({Key? key,required this.messageData}) : super(key: key);
   final Map<String, dynamic> messageData;
-
+  final bool _id = false;
   @override
+
   Widget build(BuildContext context) {
     return  Card(
        child: ListTile(
@@ -132,7 +132,7 @@ class MessageCard extends StatelessWidget {
          title: Text(messageData['text'] ),//is String? messageData['text']:'無効なメッセージ'),
          subtitle: Text(DateFormat('yyyy/MM/dd HH:mm')
              .format(DateTime.fromMillisecondsSinceEpoch(messageData['date'] is int? messageData['date']:0))),
-         tileColor: FirebaseAuth.instance.currentUser!.uid == messageData?Colors.amber[100] : Colors.blue[100],
+              tileColor: messageData['id'] is String? _id?Colors.amber[100]:Colors.blue[100],
        ),
     );
   }
