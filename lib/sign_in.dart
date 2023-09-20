@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class Chat extends StatefulWidget {
-  const Chat({super.key, required this.id})
-  final String id;
+  const Chat({super.key, required this.id});
+  final  String id;
 
  @override
   ChatState createState() => ChatState();
