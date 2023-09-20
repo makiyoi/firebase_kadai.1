@@ -74,7 +74,7 @@ class ChatState extends State<Chat> {
                       itemCount: messagesData.length,
                       itemBuilder: (context, index) {
                         final messageData = messagesData[index].data()! as Map<String, dynamic>;
-                        return MessageCard(messageData: messageData);
+                        return MessageCard(messageData: messageData,id: widget.id,);
 
                       },
                     ),
@@ -120,9 +120,10 @@ class ChatState extends State<Chat> {
   }
 }
 class MessageCard extends StatelessWidget {
-  const MessageCard({Key? key,required this.messageData}) : super(key: key);
+  const MessageCard({Key? key,required this.messageData,required this.id}) : super(key: key);
   final Map<String, dynamic> messageData;
-  final bool _id = false;
+  final String id;
+  final bool _userId = false;
   @override
 
   Widget build(BuildContext context) {
@@ -132,7 +133,7 @@ class MessageCard extends StatelessWidget {
          title: Text(messageData['text'] ),//is String? messageData['text']:'無効なメッセージ'),
          subtitle: Text(DateFormat('yyyy/MM/dd HH:mm')
              .format(DateTime.fromMillisecondsSinceEpoch(messageData['date'] is int? messageData['date']:0))),
-              tileColor: messageData['id'] is String? _id?Colors.amber[100]:Colors.blue[100],
+              tileColor: _userId? Colors.amber[100]:Colors.blue[100],
        ),
     );
   }
