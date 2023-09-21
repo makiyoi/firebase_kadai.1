@@ -1,5 +1,6 @@
+//import 'dart:js_interop';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_sub/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -17,7 +18,6 @@ class ChatState extends State<Chat> {
   final _messageEditingController = TextEditingController();
   final _listScrollController = ScrollController();
   final double _inputHeight = 60;
-
   late Stream<QuerySnapshot> _messagesStream= FirebaseFirestore.instance.collection('messages').snapshots();
 
   Stream<QuerySnapshot> _getMessagesStream() {
@@ -31,10 +31,8 @@ class ChatState extends State<Chat> {
         'date': DateTime.now().millisecondsSinceEpoch,
         'id':  widget.id,
       });
-      //FirebaseFirestore.instance.collection('messages').doc(user.uid).set({
-      //});
       _messageEditingController.clear();
-    _listScrollController.jumpTo(_listScrollController.position.maxScrollExtent);
+      _listScrollController.jumpTo(_listScrollController.position.maxScrollExtent);
   //  } catch (e) {
   //    if (!mounted) return;
    //   ScaffoldMessenger.of(context).showSnackBar(
@@ -60,7 +58,10 @@ class ChatState extends State<Chat> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Messages'),),
+      appBar: AppBar(
+        title: const Text('Messages'),
+      backgroundColor: Colors.blue[100],
+      ),
       body: Column(
         children: [
           StreamBuilder<QuerySnapshot>(
@@ -75,7 +76,6 @@ class ChatState extends State<Chat> {
                       itemBuilder: (context, index) {
                         final messageData = messagesData[index].data()! as Map<String, dynamic>;
                         return MessageCard(messageData: messageData,id: widget.id,);
-
                       },
                     ),
                   );
@@ -106,8 +106,6 @@ class ChatState extends State<Chat> {
                       //  {
                           _addMessage();
                         },
-                     // }
-                   // },
                       icon: const Icon(Icons.send),
                   ),
                 ),
@@ -123,7 +121,6 @@ class MessageCard extends StatelessWidget {
   const MessageCard({Key? key,required this.messageData,required this.id}) : super(key: key);
   final Map<String, dynamic> messageData;
   final String id;
-  final bool _userId = false;
   @override
 
   Widget build(BuildContext context) {
@@ -133,7 +130,7 @@ class MessageCard extends StatelessWidget {
          title: Text(messageData['text'] ),//is String? messageData['text']:'無効なメッセージ'),
          subtitle: Text(DateFormat('yyyy/MM/dd HH:mm')
              .format(DateTime.fromMillisecondsSinceEpoch(messageData['date'] is int? messageData['date']:0))),
-              tileColor: _userId? Colors.amber[100]:Colors.blue[100],
+              tileColor:id==messageData['id']?Colors.amber[100]:Colors.blue[100],
        ),
     );
   }

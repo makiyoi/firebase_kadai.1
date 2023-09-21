@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_sub/sign_in.dart';
 import 'package:firebase_sub/sign_iup.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_sub/firestore_service.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 

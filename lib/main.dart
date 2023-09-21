@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       title: 'Chat App',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.lightGreen
+        primarySwatch: Colors.lime,
       ),
       home:  const HomePage(),
     );

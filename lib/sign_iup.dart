@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
 
-
   @override
   SignUpState createState() => SignUpState();
 
@@ -140,7 +139,7 @@ class SignUpState extends State<SignUp> {
                   )
               ),
               SizedBox(
-                height: 300, width: 300,
+                height: 200, width: 300,
                 child: Image.asset('assets/mohikan.jpg'),
               ),
             ],
